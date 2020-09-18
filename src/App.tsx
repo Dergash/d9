@@ -12,7 +12,7 @@ import {AppBar} from './components/AppBar/AppBar'
 function App() {
   return (
     <div className="App">
-      <HashRouter basename="/d9">
+      <HashRouter>
         <AppBar />
         <Switch>
           <Route path="/bam-paperdoll">
