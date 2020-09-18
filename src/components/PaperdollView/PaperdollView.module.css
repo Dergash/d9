@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.placeholder {
+    min-height: 185px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

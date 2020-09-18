@@ -1,0 +1,16 @@
+.container {
+    background-color: #81c784;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 48px;
+}
+
+.link {
+    color: black;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
