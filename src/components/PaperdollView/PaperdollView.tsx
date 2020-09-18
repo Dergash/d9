@@ -1,5 +1,6 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import styles from './PaperdollView.module.css'
+import PaperdollBam from './PaperdollBam'
 
 type PaperdollDescriptor = {
     gender: PaperdollGender,
@@ -49,9 +50,6 @@ export const PaperdollView: React.FC = () => {
     })
 
     const paperdollName = getPaperdollName(paperdollDescriptor)
-    const OtherComponent = React.lazy(() => {
-        return import('./PaperdollBam')
-    })
 
     const handleSkin = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setSkin(skin + 1)
@@ -99,15 +97,13 @@ export const PaperdollView: React.FC = () => {
 
     return <div className={styles.container}>
         <div className={styles.placeholder}>
-            <Suspense fallback={<div>Loading...</div>}>
-                <OtherComponent
-                    paperdollName={paperdollName}
-                    skin={skin}
-                    hair={hair}
-                    major={major}
-                    minor={minor}
-                />
-            </Suspense>
+            <PaperdollBam
+                paperdollName={paperdollName}
+                skin={skin}
+                hair={hair}
+                major={major}
+                minor={minor}
+            />
         </div>
         <div>
             <select onChange={handleGender} value={paperdollDescriptor.gender}>
