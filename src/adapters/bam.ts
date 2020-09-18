@@ -1,5 +1,5 @@
 import BAMTexture from './bam-texture';
-import { BamFrameHeader } from '../model/bam-frame';
+import { BamFrameHeader, BamFrameEntry } from '../model/bam-frame';
 import { ColorRGB } from '../model/color';
 
 export { BAMTexture };
@@ -130,14 +130,10 @@ export default class BAMAdapter {
      * Extract frames entries and data from BAM binary buffer
      *
      * @param data BAM image binary data
-     * @param {FrameHeader} header
-     * @param {number} header.frameEntriesOffset Where frame entries starts
-     * @param {number} header.frameEntriesCount How many entries there are to read
-     * @param {number} header.compressedColorIndex The compressed colour index for RLE encoded bams
-     * @returns {FrameEntry[]}
+     * @param header
      */
-    parseFrames(data: ArrayBuffer, frameHeader: BamFrameHeader) {
-        const { frameEntriesOffset, frameEntriesCount, compressedColorIndex } = frameHeader
+    parseFrames(data: ArrayBuffer, frameHeader: BamFrameHeader): BamFrameEntry[] {
+        const { frameEntriesOffset, frameEntriesCount} = frameHeader
         const view = new DataView(data);
         const frameEntries = [];
         for (let frameIndex = 0; frameIndex < frameEntriesCount; frameIndex++) {
@@ -151,7 +147,7 @@ export default class BAMAdapter {
                 data: null as unknown as ArrayBuffer
             };
             // bit 0-30 is actual offset
-            const rgbaOffset = view.getUint32(frameOffset + frameHeaderSize - 4, true) << 1 >> 1;
+            const rgbaOffset = (view.getUint32(frameOffset + frameHeaderSize - 4, true) << 1) >> 1;
             frameEntry.data = data.slice(rgbaOffset);
             // bit 31 is RLE compression flag
             const compressed = view.getUint32(frameOffset + frameHeaderSize - 4, true) >> 31;

@@ -1,6 +1,5 @@
 
 import { BAMTexture } from '../adapters/bam';
-//import {Palette} from './color'
 import Palette from './palette';
 import { CharacterColor } from './color';
 
@@ -25,7 +24,7 @@ export default class Sprite {
     getAsBase64() {
         const PaletteHelper = new Palette();
         let palette = [...this.BAMTexture.palette];
-        const { width, height, compressed, data } = this.BAMTexture.frames[0];
+        const { width, height, data } = this.BAMTexture.frames[0];
         const transparencyIndex = PaletteHelper.getTransparencyIndex(palette);
         palette = PaletteHelper.setColors(palette, this.colors);
 

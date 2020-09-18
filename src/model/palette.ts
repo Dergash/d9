@@ -43,7 +43,7 @@ export default class Palette {
         const bmpRgbaOffset = view.getUint8(0x000a);
         const palette = [];
         let gradient = [];
-        let shade = 0;
+        // let shade = 0;
         for (let i = bmpRgbaOffset; i < data.byteLength; i = i + 3) {
             gradient.push({
                 blue: view.getUint8(i + 2),

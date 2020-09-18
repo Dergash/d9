@@ -1,8 +1,17 @@
 export type BamFrameHeader = {
+    /**
+     * How many entries there are to read
+     */
     frameEntriesCount: number,
     cyclesCount: number,
+    /**
+     * The compressed colour index for RLE encoded bams
+     */
     compressedColorIndex: number,
-    frameEntriesOffset: number,
+    /**
+     * Where frame entries start
+     */
+    frameEntriesOffset: number, 
     paletteOffset: number,
     frameLookupTableOffset: number
 }

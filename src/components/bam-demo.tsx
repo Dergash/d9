@@ -21,7 +21,7 @@ export const BamDemo: React.FC = () => {
     const base64 = gradient.getAsBase64();
     return <div>
         <button onClick={() => setColor(color + 1)}>Next color: {color}</button>
-        <img src={base64} />
+        <img src={base64} alt="Color icon" />
     </div>
 }
 

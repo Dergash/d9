@@ -141,8 +141,8 @@ export default class BAMTexture {
     applyPaddedDimensions() {
         this.frames = this.frames.map(frame => ({
             ...frame,
-            paddedWidth: (frame.centerX ?? 0 < 0) ? Math.abs(frame.centerX ?? 0) + frame.width : frame.width,
-            paddedHeight: (frame.centerY ?? 0 < 0) ? Math.abs(frame.centerY ?? 0) + frame.height : frame.height,
+            paddedWidth: ((frame.centerX ?? 0) < 0) ? Math.abs(frame.centerX ?? 0) + frame.width : frame.width,
+            paddedHeight: ((frame.centerY ?? 0) < 0) ? Math.abs(frame.centerY ?? 0) + frame.height : frame.height,
         }));
     }
 
