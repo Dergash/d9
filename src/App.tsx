@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import PaperdollView from './components/PaperdollView/PaperdollView'
 import {
-  BrowserRouter,
+  HashRouter,
   Switch,
   Route,
   Redirect
@@ -12,17 +12,17 @@ import {AppBar} from './components/AppBar/AppBar'
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <HashRouter basename="/d9">
         <AppBar />
         <Switch>
-          <Route path="/d9/bam-paperdoll">
+          <Route path="/bam-paperdoll">
             <PaperdollView />
           </Route>
           <Route path="/">
-            <Redirect to="/d9/bam-paperdoll" />
+            <Redirect to="/bam-paperdoll" />
           </Route>
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   )
 }
