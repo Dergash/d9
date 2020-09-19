@@ -1,50 +1,62 @@
 import { ColorRGB } from '../model/color'
-import { BamFrameEntry, BamFrameHeader } from '../model/bam-frame'
-
-type Dimensions = {
-    width: number
-    height: number
-}
-
-type Range = { start: number; end: number }
-
-type Padding = {
-    /**
-     * Sum of transparent area left and right of actual image
-     */
-    horizontal: number
-    /**
-     * Transparent area on top of actual image (TODO: bottom probably requires cycles[])
-     */
-    vertical: number
-}
+import { BamFrameEntry, BamFrameHeader, DecompressedFrameEntry } from '../model/bam-frame'
+import { decompressRLE } from '../utils/rle'
 
 /**
  * BAM texture object
+ *
  * @param {Function} decompressFrames
  * @param {Function} combineFrames
  */
 export default class BAMTexture {
+
+    public name: string
+    private header: BamFrameHeader
+    public palette: ColorRGB[]
+    public frames: DecompressedFrameEntry[]
+
+    /**
+     * Sprite final dimensions after frames combined
+     */
+    dimensions = {
+        width: 0,
+        height : 0
+    }
+
     constructor(
-        public name: string,
-        public header: BamFrameHeader,
-        public palette: ColorRGB[],
-        public frames: BamFrameEntry[]
-    ) {}
+        name: string,
+        header: BamFrameHeader,
+        palette: ColorRGB[],
+        frames: BamFrameEntry[]
+    ) {
+        this.name = name
+        this.header = header
+        this.palette = palette
+        this.frames = this.decompressFrames(frames)
+        if (this.frames.length > 1) {
+            this.combineFrames()
+        }
+    }
 
     /**
      * Decompress frames
      */
-    decompressFrames() {
-        this.frames.forEach(frame => {
+    decompressFrames(frames: BamFrameEntry[]): DecompressedFrameEntry[] {
+        return frames.map(frame => {
+            const resultFrame = frame as DecompressedFrameEntry
             if (frame.compressed && frame.data) {
-                frame.data = decompressRLE(
+                resultFrame.data = decompressRLE(
                     frame.data,
                     this.header.compressedColorIndex
                 )
-                frame.compressed = false
+                resultFrame.compressed = false
             }
+            const [width, height] = this.getPaddedDimensions(frame)
+            resultFrame.paddedWidth = width
+            resultFrame.paddedHeight = height
+            return resultFrame
         })
+        
     }
 
     /**
@@ -54,72 +66,31 @@ export default class BAMTexture {
      * (along with their centerX/Y fields). Currently this method works only for vertical combinations.
      */
     combineFrames() {
-        this.applyPaddedDimensions()
-        const dimensions = this.frames.reduce(
-            (prev: BamFrameEntry, next: BamFrameEntry) => {
-                const {
-                    paddedWidth: prevPaddedWidth = 0,
-                    paddedHeight: prevPaddedHeight = 0,
-                } = prev
-                const {
-                    paddedWidth: nextPaddedWidth = 0,
-                    paddedHeight: nextPaddedHeight = 0,
-                } = next
-                return {
-                    width:
-                        prevPaddedWidth < nextPaddedWidth
-                            ? nextPaddedWidth
-                            : prevPaddedWidth,
-                    height: prevPaddedHeight + nextPaddedHeight,
-                }
-            }
-        )
-        const spriteSize = dimensions.width * dimensions.height
-        const data = new Uint8Array(spriteSize)
+        /**
+         * TODO: Currently hardcoded for two vertical frames, concatenation will be different
+         * for more complex sprites
+         */
+        this.dimensions.width = Math.max(...this.frames.map(frame => frame.paddedWidth as number))
+        this.dimensions.height = this.frames.reduce((prev, next) => {
+            return prev + (next.paddedHeight as number)
+        }, 0)
+
+        const spriteSize = this.dimensions.width * this.dimensions.height
+        // Initialize result sprite with transparent background
+        const data = new Uint8Array(spriteSize).fill(this.header.compressedColorIndex)
         this.frames.forEach((frame, index) => {
-            this.putFrameInSprite(data, dimensions, frame, index)
+            this.putFrameInSprite(data, frame)
         })
         this.frames = [
             {
                 data,
-                width: dimensions.width,
-                height: dimensions.height,
+                width: this.dimensions.width,
+                height: this.dimensions.height,
+                paddedHeight: this.dimensions.height,
+                paddedWidth: this.dimensions.width,
+                dataOffset: 0
             },
         ]
-    }
-
-    /**
-     * Extend frame with transparency paddings and place it in sprite data array.
-     *
-     * @param frame
-     * @param frameIndex
-     * @param spriteData
-     * @param spriteDimensions
-     */
-    putFrameInSprite(
-        spriteData: Uint8Array,
-        spriteDimensions: Dimensions,
-        frame: BamFrameEntry,
-        frameIndex: number
-    ) {
-        // Frame range
-        const { start: frameStart, end: frameEnd } = this.getFrameRange(
-            frameIndex,
-            spriteDimensions
-        )
-        // Transparent paddings
-        const { horizontal, vertical } = this.getFramePadding(
-            frame,
-            spriteDimensions
-        )
-        // Actual image range
-        const imageRange = { start: frameStart + vertical, end: frameEnd }
-        // Fill top padding with transparency
-        for (let i = frameStart; i < imageRange.start; i++) {
-            spriteData[i] = this.header.compressedColorIndex
-        }
-        // Fill image data
-        this.putImageInSprite(spriteData, imageRange, frame, horizontal)
     }
 
     /**
@@ -133,35 +104,53 @@ export default class BAMTexture {
      *
      * Then, when we set padding of 2, we get
      * [T, T, P, P, P, T, T, P, P, P]
+     * 
+     * TODO: It's hardcoded for two vertical frames and overcomplicated, WIP 
      */
-    putImageInSprite(
+    putFrameInSprite(
         data: Uint8Array,
-        range: Range,
-        frame: BamFrameEntry,
-        padding: number
+        frame: DecompressedFrameEntry
     ) {
-        let frameBytesCounter = 0
-        let paddingBytesCounter = padding
-        let srcPixelIndex = 0
-        for (let i = range.start; i < range.end; i++) {
-            if (paddingBytesCounter !== 0) {
-                // Process transparent padding
-                data[i] = this.header.compressedColorIndex
-                paddingBytesCounter--
-            } else {
-                // Process actual image pixels
-                if (data) {
-                    data[i] = frame.data
-                        ? new Uint8Array(frame.data)[srcPixelIndex]
-                        : 0
+        // From which side transparent padding should be appended
+        const paddedHorizontal = this.frames.some(item => item !== frame && item.paddedWidth > frame.paddedWidth)
+            ? 'right'
+            : 'left'
+        // Calculate offset by sum offsets of all previous frames
+        const offset = this.frames
+        .slice(0, this.frames.findIndex(item => item === frame))
+        .reduce((prev, next) => {
+            const frameSizeInBytes = next.paddedHeight * this.dimensions.width
+            return prev + frameSizeInBytes
+        }, 0)
+        // If frame was moved vertically by `centerY` we skip transparent rectangle padding
+        const verticalPaddingOffset = (frame.paddedHeight - frame.height) * this.dimensions.width
+        // Set cursor to starting index of `centered` frame
+        let resultByteIndex = offset + verticalPaddingOffset
+        // If frame was moved horizontally by `centerX` skip left padding
+        resultByteIndex = resultByteIndex + (frame.paddedWidth - frame.width)
+        
+        // TODO: Will be explained in .MD markdown file
+        
+        if (paddedHorizontal === 'right') {
+            for (let i = 0; i < frame.height * frame.width; i++) {
+                const eol = ((i + 1) % frame.width) === 0
+                if (eol) {
+                    resultByteIndex += (frame.paddedWidth - frame.width) + (this.dimensions.width - frame.paddedWidth)
                 }
-                srcPixelIndex++
-                frameBytesCounter++
+                data[resultByteIndex] = frame.data[i]
+                resultByteIndex++
             }
-            if (frameBytesCounter === frame.width) {
-                // Go to the next padding
-                paddingBytesCounter = padding
-                frameBytesCounter = 0
+        }
+
+        if (paddedHorizontal === 'left') {
+            for (let i = 0; i < frame.data.length; i++) {
+                const eol = ((resultByteIndex) % frame.paddedWidth) === 0
+                if (eol) {
+                    resultByteIndex += (frame.paddedWidth - frame.width)
+                } else {
+                    data[resultByteIndex] = frame.data[i]
+                }
+                resultByteIndex++
             }
         }
     }
@@ -173,86 +162,14 @@ export default class BAMTexture {
      * Frames concatenated with centerX, centerY coordinates.
      * When centerX/centerY is negative, actual image is shifted right/bottom
      */
-    applyPaddedDimensions() {
-        this.frames = this.frames.map(frame => ({
-            ...frame,
-            paddedWidth:
-                (frame.centerX ?? 0) < 0
-                    ? Math.abs(frame.centerX ?? 0) + frame.width
-                    : frame.width,
-            paddedHeight:
-                (frame.centerY ?? 0) < 0
-                    ? Math.abs(frame.centerY ?? 0) + frame.height
-                    : frame.height,
-        }))
+    getPaddedDimensions(frame: BamFrameEntry) {
+        const paddedWidth = (frame.centerX ?? 0) < 0
+            ? Math.abs(frame.centerX ?? 0) + frame.width
+            : frame.width
+        const paddedHeight = (frame.centerY ?? 0) < 0
+            ? Math.abs(frame.centerY ?? 0) + frame.height
+            : frame.height
+        return [paddedWidth, paddedHeight]
     }
 
-    /**
-     * Get start/end offsets for the frame in the output array
-     *
-     * @param frameIndex Frame index
-     * @param {Dimensions} spriteDimensions Resulting image dimenstions
-     * @returns {Range}
-     */
-    getFrameRange(frameIndex: number, spriteDimensions: Dimensions) {
-        let start = 0
-        for (let i = 0; i < frameIndex; i++) {
-            const { paddedWidth = 0, paddedHeight = 0 } = this.frames[i]
-            start += paddedWidth * paddedHeight
-        }
-        const end =
-            start +
-            spriteDimensions.width * (this.frames[frameIndex].paddedHeight ?? 0)
-        return { start, end }
-    }
-
-    /**
-     * Get transparent padding around actual image
-     */
-    getFramePadding(
-        frame: BamFrameEntry,
-        spriteDimensions: Dimensions
-    ): Padding {
-        return {
-            horizontal: spriteDimensions.width - frame.width,
-            vertical:
-                spriteDimensions.width *
-                ((frame.paddedHeight ?? 0) - frame.height),
-        }
-    }
-}
-
-/**
- * Decompress RLE-compressed data
- *
- * Each compressionByte will be repeated as specified by
- * the next byte value plus one, e.g. for compressionByte = 0x0A
- *
- * 0xAB 0x0A 0x02 0x0B  becomes 0xAB 0x0A 0x0A 0x0A 0x0B:
- *
- * All other bytes will not change.
- *
- * @param data Frame compressed data
- * @param compressionByte Byte used for compression
- * @returns {Uint8Array} Decompressed data
- */
-export function decompressRLE(data: ArrayBuffer, compressionByte: number) {
-    const compressedData = new DataView(data)
-    const decompressedData = []
-    for (let i = 0; i < compressedData.byteLength; i++) {
-        if (compressedData.getUint8(i) === compressionByte) {
-            const numberOfRepeats = compressedData.getUint8(i + 1) + 1
-            for (
-                let processedRepeats = 0;
-                processedRepeats < numberOfRepeats;
-                processedRepeats++
-            ) {
-                decompressedData.push(compressionByte)
-            }
-            i = i + 1
-        } else {
-            decompressedData.push(compressedData.getUint8(i))
-        }
-    }
-    return new Uint8Array(decompressedData)
 }

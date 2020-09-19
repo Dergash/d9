@@ -124,6 +124,13 @@ export default class BAMAdapter {
         for (let frameIndex = 0; frameIndex < frameEntriesCount; frameIndex++) {
             const frameOffset =
                 frameEntriesOffset + frameIndex * frameHeaderSize
+            // bit 0-30 is actual offset
+            const rgbaOffset =
+            (view.getUint32(frameOffset + frameHeaderSize - 4, true) <<
+                1) >>
+            1
+            // bit 31 is RLE compression flag
+            const compressed = view.getUint32(frameOffset + frameHeaderSize - 4, true) >> 31
             const frameEntry = {
                 width: view.getUint16(frameOffset + 0x0000, true),
                 height: view.getUint16(frameOffset + 0x0002, true),
@@ -131,19 +138,19 @@ export default class BAMAdapter {
                 centerY: view.getInt16(frameOffset + 0x0006, true),
                 compressed: Boolean(view.getUint8(frameOffset + 0x0008 + 3)),
                 data: (null as unknown) as ArrayBuffer,
+                dataOffset: rgbaOffset
             }
-            // bit 0-30 is actual offset
-            const rgbaOffset =
-                (view.getUint32(frameOffset + frameHeaderSize - 4, true) <<
-                    1) >>
-                1
-            frameEntry.data = data.slice(rgbaOffset)
-            // bit 31 is RLE compression flag
-            const compressed =
-                view.getUint32(frameOffset + frameHeaderSize - 4, true) >> 31
             frameEntry.compressed = !compressed
             frameEntries.push(frameEntry)
         }
+        for (let frameIndex = 0; frameIndex < frameEntriesCount; frameIndex++) {
+            const frameEntry = frameEntries[frameIndex]
+            const nextFrameEntry = frameEntries[frameIndex + 1]
+            frameEntry.data = nextFrameEntry
+                ? data.slice(frameEntry.dataOffset, nextFrameEntry.dataOffset)
+                : data.slice(frameEntry.dataOffset)
+        }
+
         return frameEntries
     }
 }

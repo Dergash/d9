@@ -28,8 +28,15 @@ export type BamFrameEntry = {
     /**
      * Pixels in RGBA
      */
-    data?: ArrayBuffer // TODO: mandatory
-    // TODO: All properties below are not actually a part of BAM and should be moved elsewhere
-    paddedWidth?: number
-    paddedHeight?: number
+    data: ArrayBuffer,
+    dataOffset: number
+}
+
+export type PaddedFrameEntry = BamFrameEntry & {
+    paddedWidth: number,
+    paddedHeight: number
+}
+
+export type DecompressedFrameEntry = BamFrameEntry & PaddedFrameEntry & {
+    data: Uint8Array
 }

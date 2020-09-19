@@ -29,10 +29,7 @@ export const PaperdollBam: React.FC<PekProps> = props => {
             .then(bin => {
                 const adapter = new BAMAdapter()
                 const bam = adapter.parse('COLGRAD', bin.default)
-                bam.decompressFrames()
-                if (bam.frames.length > 1) {
-                    bam.combineFrames()
-                }
+
                 const gradient = new Sprite(bam)
                 setSprite(gradient)
             })

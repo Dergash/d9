@@ -55,8 +55,8 @@ export const PaperdollView: React.FC = () => {
     const [paperdollDescriptor, setPaperdollDescriptor] = React.useState({
         gender: PaperdollGender.Male,
         race: PaperdollRace.Human,
-        role: PaperdollRole.Priest,
-        armor: PaperdollArmor.Heavy,
+        role: PaperdollRole.Warrior,
+        armor: PaperdollArmor.None,
     })
 
     const paperdollName = getPaperdollName(paperdollDescriptor)

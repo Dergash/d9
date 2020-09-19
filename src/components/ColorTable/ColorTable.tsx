@@ -23,7 +23,6 @@ export const ColorTable: React.FC<ColorTableProps> = props => {
         const colorsSrc: Record<number, string> = {}
         const adapter = new BAMAdapter()
         const bam = adapter.parse('COLGRAD', icon)
-        bam.decompressFrames()
         const gradient = new Sprite(bam)
         const paletteParser = new Palette()
         const parsedPalette = paletteParser.parse(palette)
