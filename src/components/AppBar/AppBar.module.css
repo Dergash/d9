@@ -1,5 +1,5 @@
 .container {
-    background-color: #81c784;
+    background-color: rgb(23, 43, 58);
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -7,7 +7,7 @@
 }
 
 .link {
-    color: black;
+    color: hsla(0, 0%, 100%, .4);
     text-decoration: none;
 }
 

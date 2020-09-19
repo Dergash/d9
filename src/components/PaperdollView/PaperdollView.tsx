@@ -1,6 +1,8 @@
 import React from 'react'
 import styles from './PaperdollView.module.css'
 import PaperdollBam from './PaperdollBam'
+import ColorTable from '../ColorTable/ColorTable'
+import { Card } from '../Card/Card'
 
 type PaperdollDescriptor = {
     gender: PaperdollGender,
@@ -38,34 +40,21 @@ enum PaperdollArmor {
 }
 
 export const PaperdollView: React.FC = () => {
-    const [skin, setSkin] = React.useState(12)
-    const [hair, setHair] = React.useState(17)
+    const [skin, setSkin] = React.useState(16)
+    const [hair, setHair] = React.useState(4)
     const [major, setMajor] = React.useState(44)
     const [minor, setMinor] = React.useState(55)
+    const [armor, setArmor] = React.useState(28) // Armor/Trimming
+    const [leather, setLeather] = React.useState(23) // Strap/Leather
+    const [metal, setMetal] = React.useState(30) // Belt/Amulet
     const [paperdollDescriptor, setPaperdollDescriptor] = React.useState({
         gender: PaperdollGender.Male,
         race: PaperdollRace.Human,
-        role: PaperdollRole.Rogue,
-        armor: PaperdollArmor.None
+        role: PaperdollRole.Priest,
+        armor: PaperdollArmor.Heavy
     })
 
     const paperdollName = getPaperdollName(paperdollDescriptor)
-
-    const handleSkin = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setSkin(skin + 1)
-    }
-
-    const handleHair = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setHair(hair + 1)
-    }
-
-    const handleMajor = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setMajor(major + 1)
-    }
-
-    const handleMinor = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setMinor(minor + 1)
-    }
 
     const handleGender = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setPaperdollDescriptor({
@@ -103,10 +92,13 @@ export const PaperdollView: React.FC = () => {
                 hair={hair}
                 major={major}
                 minor={minor}
+                armor={armor}
+                metal={metal}
+                leather={leather}
             />
         </div>
         <div>
-            <select onChange={handleGender} value={paperdollDescriptor.gender}>
+            <select onChange={handleGender} value={paperdollDescriptor.gender} className={styles.select}>
                 <option value={PaperdollGender.Male}>
                     Male
                 </option>
@@ -114,7 +106,7 @@ export const PaperdollView: React.FC = () => {
                     Female
                 </option>
             </select>
-            <select onChange={handleRace} value={paperdollDescriptor.race}>
+            <select onChange={handleRace} value={paperdollDescriptor.race} className={styles.select}>
                 <option value={PaperdollRace.Human}>
                     Human
                 </option>
@@ -124,7 +116,7 @@ export const PaperdollView: React.FC = () => {
                 <option>Gnome</option>
                 <option>Halfling</option>
             </select>
-            <select onChange={handleRole} value={paperdollDescriptor.role}>
+            <select onChange={handleRole} value={paperdollDescriptor.role} className={styles.select}>
                 <option value={PaperdollRole.Warrior}>
                     Warrior
                 </option>
@@ -138,7 +130,7 @@ export const PaperdollView: React.FC = () => {
                     Magic User
                 </option>
             </select>
-            <select onChange={handleArmor} value={paperdollDescriptor.armor}>
+            <select onChange={handleArmor} value={paperdollDescriptor.armor} className={styles.select}>
                 <option value={PaperdollArmor.None}>
                     None
                 </option>
@@ -152,13 +144,30 @@ export const PaperdollView: React.FC = () => {
                     Heavy
                 </option>
             </select>
-            <div>
-                <button onClick={handleSkin}>Skin: {skin}</button>
-                <button onClick={handleHair}>Hair: {hair}</button>
-                <button onClick={handleMajor}>Major: {major}</button>
-                <button onClick={handleMinor}>Minor: {minor}</button>
             </div>
-        </div>
+            <div className={styles.colorsContainer}>
+                <Card title="Skin">
+                    <ColorTable type="skin" selectedIndex={skin} onClick={(setSkin)} />
+                </Card>
+                <Card title="Hair">
+                    <ColorTable type="hair" selectedIndex={hair} onClick={(setHair)} />
+                </Card>
+                <Card title="Major">
+                <ColorTable type="major" selectedIndex={major} onClick={(setMajor)} />
+                </Card>
+                <Card title="Minor">
+                <ColorTable type="minor" selectedIndex={minor} onClick={(setMinor)} />
+                </Card>
+                <Card title="Armor">
+                    <ColorTable type="armor" selectedIndex={armor} onClick={(setArmor)} />
+                </Card>
+                <Card title="Leather">
+                    <ColorTable type="leather" selectedIndex={leather} onClick={(setLeather)} />
+                </Card>
+                <Card title="Metal">
+                    <ColorTable type="metal" selectedIndex={metal} onClick={(setMetal)} />
+                </Card>
+            </div>
     </div>
 }
 

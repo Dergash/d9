@@ -11,12 +11,21 @@ interface PekProps {
     skin: number,
     hair: number,
     major: number,
-    minor: number
+    minor: number,
+    leather: number,
+    armor: number,
+    metal: number
 }
 
 export const PaperdollBam: React.FC<PekProps> = (props) => {
-    const [src, setSrc] = React.useState<string | undefined | null>(undefined)
-    import(`!arraybuffer-loader!../../assets/${props.paperdollName}`)
+    const [sprite, setSprite] = React.useState<Sprite | undefined | null>()
+    const p = React.useMemo(() => {
+        const paletteParser = new Palette()
+        const parsedPalette = paletteParser.parse(palette)
+        return parsedPalette
+    }, [])
+    React.useEffect(() => {
+        import(`!arraybuffer-loader!../../assets/${props.paperdollName}`)
         .then((bin) => {
             const adapter = new BAMAdapter();
             const bam = adapter.parse('COLGRAD', bin.default);
@@ -25,25 +34,31 @@ export const PaperdollBam: React.FC<PekProps> = (props) => {
                 bam.combineFrames();
             }
             const gradient = new Sprite(bam);
-            const paletteParser = new Palette()
-            const parsedPalette = paletteParser.parse(palette)
-            gradient.colors.skin = parsedPalette[props.skin]
-            gradient.colors.hair = parsedPalette[props.hair]
-            gradient.colors.major = parsedPalette[props.major]
-            gradient.colors.minor = parsedPalette[props.minor]
-            gradient.colors.leather = parsedPalette[4]
-            const base64 = gradient.getAsBase64();
-            setSrc(base64)
+            setSprite(gradient)
         })
         .catch((e) => {
             console.error(e)
-            setSrc(null)
+            setSprite(null)
         })
+    }, [props.paperdollName])
+    
+    if (sprite) {
+        sprite.colors.skin = p[props.skin]
+        sprite.colors.hair = p[props.hair]
+        sprite.colors.major = p[props.major]
+        sprite.colors.minor = p[props.minor]
+        sprite.colors.leather = p[props.leather]
+        sprite.colors.armor = p[props.armor]
+        sprite.colors.metal = p[props.metal]
+        const base64 = sprite.getAsBase64();
+        return <div>
+            {sprite && <img src={base64} alt="Color icon" />}
+        </div>
+    }
     return <div>
-        {src && <img src={src} alt="Color icon" />}
-        {src === undefined && <div className={styles.placeholder}>Loading...</div>}
-        {src === null && <div className={styles.placeholder}>Not implemented</div>}
+        {sprite === undefined && <div className={styles.placeholder}>Loading...</div>}
+        {sprite === null && <div className={styles.placeholder}>Not implemented</div>}
     </div>
 }
 
-export default PaperdollBam
+export default React.memo(PaperdollBam)

@@ -11,3 +11,5 @@ export type CharacterColor = {
     leather: any,
     armor: any
 }
+
+export type AppearanceColorType = keyof CharacterColor
