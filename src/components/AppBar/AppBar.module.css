@@ -1,38 +1,38 @@
 .container {
-  background-color: rgb(23, 43, 58);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  height: 48px;
+    background-color: rgb(23, 43, 58);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    height: 48px;
 }
 
 .menu {
-  color: hsla(0, 0%, 100%, 0.4);
-  text-decoration: none;
+    color: hsla(0, 0%, 100%, 0.4);
+    text-decoration: none;
 }
 
 .menu:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .links {
-  padding-right: 32px;
+    padding-right: 32px;
 }
 
 .link {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .img {
-  width: 32px;
-  height: 32px;
+    width: 32px;
+    height: 32px;
 }
 
 .img:hover {
-  filter: brightness(85%);
+    filter: brightness(85%);
 }
 
 .pages {
-  padding-left: 32px;
-  font-size: 1.2em;
+    padding-left: 32px;
+    font-size: 1.2em;
 }

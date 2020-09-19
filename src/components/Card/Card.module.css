@@ -1,12 +1,12 @@
 .container {
-  background: rgb(15, 32, 45);
-  grid-template-rows: auto 1fr;
-  color: hsla(0, 0%, 100%, 0.4);
-  padding: 8px;
+    background: rgb(15, 32, 45);
+    grid-template-rows: auto 1fr;
+    color: hsla(0, 0%, 100%, 0.4);
+    padding: 8px;
 }
 
 .title {
-  margin: 0;
-  font-weight: normal;
-  margin-bottom: 12px;
+    margin: 0;
+    font-weight: normal;
+    margin-bottom: 12px;
 }

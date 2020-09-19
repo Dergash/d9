@@ -1,42 +1,42 @@
 .container {
-  display: grid;
-  row-gap: 32px;
-  color: white;
-  padding-left: 12px;
-  padding-right: 12px;
+    display: grid;
+    row-gap: 32px;
+    color: white;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 .placeholder {
-  min-height: 185px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    min-height: 185px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .selectors {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .select {
-  background: transparent;
-  color: inherit;
-  border: 1px solid rgb(15, 32, 45);
+    background: transparent;
+    color: inherit;
+    border: 1px solid rgb(15, 32, 45);
 }
 
 .select option {
-  background: #09141c;
+    background: #09141c;
 }
 
 .colorsContainer {
-  display: inline-grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  grid-auto-rows: 1fr;
-  gap: 8px;
+    display: inline-grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 8px;
 }
 
 @media (max-width: 768px) {
-  .colorsContainer {
-    grid-template-columns: repeat(1, 1fr);
-  }
+    .colorsContainer {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }

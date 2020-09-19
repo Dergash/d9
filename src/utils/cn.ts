@@ -1,7 +1,7 @@
 /* Simplified JedWatson/classnames (https://github.com/JedWatson/classnames) */
 
 interface IClassNamesDefinition {
-  [className: string]: boolean
+    [className: string]: boolean
 }
 
 /**
@@ -14,19 +14,19 @@ interface IClassNamesDefinition {
  * @returns Joined className string
  */
 function cn(...classNames: Array<string | IClassNamesDefinition>) {
-  const result: string[] = []
-  classNames.forEach(item => {
-    if (typeof item === 'string') {
-      result.push(item)
-    } else {
-      Object.keys(item).forEach(key => {
-        if (item[key]) {
-          result.push(key)
+    const result: string[] = []
+    classNames.forEach(item => {
+        if (typeof item === 'string') {
+            result.push(item)
+        } else {
+            Object.keys(item).forEach(key => {
+                if (item[key]) {
+                    result.push(key)
+                }
+            })
         }
-      })
-    }
-  })
-  return result.join(' ')
+    })
+    return result.join(' ')
 }
 
 export default cn
