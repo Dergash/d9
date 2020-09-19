@@ -54,8 +54,8 @@ export const PaperdollView: React.FC = () => {
     const [metal, setMetal] = React.useState(30) // Belt/Amulet
     const [paperdollDescriptor, setPaperdollDescriptor] = React.useState({
         gender: PaperdollGender.Male,
-        race: PaperdollRace.Human,
-        role: PaperdollRole.Warrior,
+        race: PaperdollRace.Gnome,
+        role: PaperdollRole.MagicUser,
         armor: PaperdollArmor.None,
     })
 
