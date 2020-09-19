@@ -13,9 +13,11 @@
         "@types/react-dom": "^16.9.0",
         "arraybuffer-loader": "^1.0.8",
         "react": "^16.13.1",
+        "react-app-polyfill": "^1.0.6",
         "react-dom": "^16.13.1",
         "react-router-dom": "^5.2.0",
         "react-scripts": "3.4.3",
+        "text-decoding": "^1.0.0",
         "typescript": "~3.7.2"
     },
     "scripts": {
@@ -29,14 +31,16 @@
     },
     "browserslist": {
         "production": [
+            "ie 11",
             ">0.2%",
             "not dead",
             "not op_mini all"
         ],
         "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
+            "ie 11",
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
         ]
     },
     "devDependencies": {

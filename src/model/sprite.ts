@@ -1,4 +1,4 @@
-import { BAMTexture } from '../adapters/bam'
+import BAMTexture from '../adapters/bam-texture'
 import Palette from './palette'
 import { CharacterColor } from './color'
 

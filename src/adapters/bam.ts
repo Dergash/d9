@@ -1,9 +1,7 @@
 import BAMTexture from './bam-texture'
 import { BamFrameHeader, BamFrameEntry } from '../model/bam-frame'
 import { ColorRGB } from '../model/color'
-
-export { BAMTexture }
-
+import {TextDecoder} from 'text-decoding'
 /**
  * @see http://gemrb.org/iesdp/file_formats/ie_formats/bam_v1.htm#bamv1_Header
  */
