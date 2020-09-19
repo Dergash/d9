@@ -1,12 +1,7 @@
-import React from 'react';
+import React from 'react'
 import PaperdollView from './components/PaperdollView/PaperdollView'
-import {
-  HashRouter,
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom'
-import {AppBar} from './components/AppBar/AppBar'
+import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { AppBar } from './components/AppBar/AppBar'
 
 function App() {
   return (
