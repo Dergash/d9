@@ -37,9 +37,14 @@ export default class Sprite {
         const imgData = context.createImageData(width, height);
 
         for (let i = 0; i < pixels.length; i++) {
-            imgData.data[i * 4 + 0] = palette[pixels[i]].blue;
-            imgData.data[i * 4 + 1] = palette[pixels[i]].green;
-            imgData.data[i * 4 + 2] = palette[pixels[i]].red;
+            if (!palette[pixels[i]]) {
+                console.warn(i)
+                console.warn(palette)
+                console.warn(pixels)
+            }
+            imgData.data[i * 4 + 0] = palette[pixels[i]]?.blue; // TODO: 'Dward warrior heavy' references index 255 and crashes with out of range
+            imgData.data[i * 4 + 1] = palette[pixels[i]]?.green;
+            imgData.data[i * 4 + 2] = palette[pixels[i]]?.red;
             imgData.data[i * 4 + 3] = (pixels[i] === transparencyIndex) ? 0 : 255;
         }
 

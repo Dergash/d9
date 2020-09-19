@@ -17,7 +17,12 @@ function getPaperdollName(paperdollDescriptor: PaperdollDescriptor) {
 }
 
 enum PaperdollRace {
-    Human = 'H'
+    Human = 'H',
+    Elf = 'E',
+    HalfElf = 'E',
+    Gnome = 'D',
+    Halfling = 'I',
+    Dwarf = 'D'
 }
 
 enum PaperdollGender {
@@ -110,11 +115,21 @@ export const PaperdollView: React.FC = () => {
                 <option value={PaperdollRace.Human}>
                     Human
                 </option>
-                <option>Elf</option>
-                <option>Half-elf</option>
-                <option>Dwarf</option>
-                <option>Gnome</option>
-                <option>Halfling</option>
+                <option value={PaperdollRace.Elf}>
+                    Elf
+                </option>
+                <option value={PaperdollRace.HalfElf}>
+                    Half-Elf
+                </option>
+                <option value={PaperdollRace.Gnome}>
+                    Gnome
+                </option>
+                <option value={PaperdollRace.Halfling}>
+                    Halfing
+                </option>
+                <option value={PaperdollRace.Dwarf}>
+                    Dwarf
+                </option>
             </select>
             <select onChange={handleRole} value={paperdollDescriptor.role} className={styles.select}>
                 <option value={PaperdollRole.Warrior}>
