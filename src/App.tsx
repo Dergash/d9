@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import PaperdollView from './components/PaperdollView/PaperdollView'
 import {
   HashRouter,

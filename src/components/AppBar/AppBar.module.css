@@ -1,16 +1,38 @@
 .container {
     background-color: rgb(23, 43, 58);
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
     height: 48px;
 }
 
-.link {
+.menu {
     color: hsla(0, 0%, 100%, .4);
     text-decoration: none;
 }
 
-.link:hover {
+.menu:hover {
     text-decoration: underline;
+}
+
+.links {
+    padding-right: 32px;
+}
+
+.link {
+    cursor: pointer;
+}
+
+.img {
+    width: 32px;
+    height: 32px;
+}
+
+.img:hover {
+    filter: brightness(85%);
+}
+
+.pages {
+    padding-left: 32px;
+    font-size: 1.2em;
 }

@@ -102,7 +102,7 @@ export const PaperdollView: React.FC = () => {
                 leather={leather}
             />
         </div>
-        <div>
+        <div className={styles.selectors}>
             <select onChange={handleGender} value={paperdollDescriptor.gender} className={styles.select}>
                 <option value={PaperdollGender.Male}>
                     Male
