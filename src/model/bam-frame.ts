@@ -28,15 +28,16 @@ export type BamFrameEntry = {
     /**
      * Pixels in RGBA
      */
-    data: ArrayBuffer,
+    data: ArrayBuffer
     dataOffset: number
 }
 
 export type PaddedFrameEntry = BamFrameEntry & {
-    paddedWidth: number,
+    paddedWidth: number
     paddedHeight: number
 }
 
-export type DecompressedFrameEntry = BamFrameEntry & PaddedFrameEntry & {
-    data: Uint8Array
-}
+export type DecompressedFrameEntry = BamFrameEntry &
+    PaddedFrameEntry & {
+        data: Uint8Array
+    }

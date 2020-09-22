@@ -19,21 +19,14 @@ describe.skip('BAM adapter', () => {
 
     it('should parse palette', () => {
         const { paletteOffset, frameLookupTableOffset } = expectedResult.header
-        const palette = adapter.parsePalette(
-            multipleFramesBam,
-            paletteOffset,
-            frameLookupTableOffset
-        )
+        const palette = adapter.parsePalette(multipleFramesBam, paletteOffset, frameLookupTableOffset)
         expect(palette).toHaveLength(255)
         expect(palette[0]).toEqual({ red: 0, green: 255, blue: 0 })
         expect(palette[254]).toEqual({ red: 72, green: 71, blue: 0 })
     })
 
     it('should parse frames', () => {
-        const frames = adapter.parseFrames(
-            multipleFramesBam,
-            expectedResult.header
-        )
+        const frames = adapter.parseFrames(multipleFramesBam, expectedResult.header)
         expect(frames.length).toBe(expectedResult.frames.length)
         expect(frames[0]).toMatchObject(expectedResult.frames[0])
         expect(frames[0].data.byteLength).toBe(expectedFrame0Length)
@@ -48,10 +41,7 @@ describe.skip('BAM adapter', () => {
     })
 
     it('should detect compression flag', () => {
-        const compressedFrames = adapter.parseFrames(
-            multipleFramesBam,
-            expectedResult.header
-        )
+        const compressedFrames = adapter.parseFrames(multipleFramesBam, expectedResult.header)
         const uncompressedFrames = adapter.parseFrames(uncompressedBam, {
             frameEntriesOffset: uncompressedBamFramesOffset,
             frameEntriesCount: 1,

@@ -1,7 +1,7 @@
 import BAMTexture from './bam-texture'
 import { BamFrameHeader, BamFrameEntry } from '../model/bam-frame'
 import { ColorRGB } from '../model/color'
-import {TextDecoder} from 'text-decoding'
+import { TextDecoder } from 'text-decoding'
 /**
  * @see http://gemrb.org/iesdp/file_formats/ie_formats/bam_v1.htm#bamv1_Header
  */
@@ -42,11 +42,7 @@ export default class BAMAdapter {
     parse(name: string, data: ArrayBuffer) {
         const header = this.parseHeader(data)
         const frames = this.parseFrames(data, header)
-        const palette = this.parsePalette(
-            data,
-            header.paletteOffset,
-            header.frameLookupTableOffset
-        )
+        const palette = this.parsePalette(data, header.paletteOffset, header.frameLookupTableOffset)
         const texture = new BAMTexture(name, header, palette, frames)
         return texture
     }
@@ -67,20 +63,12 @@ export default class BAMAdapter {
         if (parsedSignature === 'BAM V1  ') {
             this.signature = parsedSignature
             return {
-                frameEntriesCount: view.getUint16(
-                    offsets.frameEntriesCount,
-                    true
-                ),
+                frameEntriesCount: view.getUint16(offsets.frameEntriesCount, true),
                 cyclesCount: view.getUint8(offsets.cyclesCount),
-                compressedColorIndex: view.getUint8(
-                    offsets.compressedColorIndex
-                ),
+                compressedColorIndex: view.getUint8(offsets.compressedColorIndex),
                 frameEntriesOffset: view.getUint32(offsets.frameEntries, true),
                 paletteOffset: view.getUint32(offsets.palette, true),
-                frameLookupTableOffset: view.getUint32(
-                    offsets.frameLookupTable,
-                    true
-                ),
+                frameLookupTableOffset: view.getUint32(offsets.frameLookupTable, true),
             }
         }
         throw new Error(`Unknown format: ${parsedSignature}`)
@@ -112,21 +100,14 @@ export default class BAMAdapter {
      * @param data BAM image binary data
      * @param header
      */
-    parseFrames(
-        data: ArrayBuffer,
-        frameHeader: BamFrameHeader
-    ): BamFrameEntry[] {
+    parseFrames(data: ArrayBuffer, frameHeader: BamFrameHeader): BamFrameEntry[] {
         const { frameEntriesOffset, frameEntriesCount } = frameHeader
         const view = new DataView(data)
         const frameEntries = []
         for (let frameIndex = 0; frameIndex < frameEntriesCount; frameIndex++) {
-            const frameOffset =
-                frameEntriesOffset + frameIndex * frameHeaderSize
+            const frameOffset = frameEntriesOffset + frameIndex * frameHeaderSize
             // bit 0-30 is actual offset
-            const rgbaOffset =
-            (view.getUint32(frameOffset + frameHeaderSize - 4, true) <<
-                1) >>
-            1
+            const rgbaOffset = (view.getUint32(frameOffset + frameHeaderSize - 4, true) << 1) >> 1
             // bit 31 is RLE compression flag
             const compressed = view.getUint32(frameOffset + frameHeaderSize - 4, true) >> 31
             const frameEntry = {
@@ -136,7 +117,7 @@ export default class BAMAdapter {
                 centerY: view.getInt16(frameOffset + 0x0006, true),
                 compressed: Boolean(view.getUint8(frameOffset + 0x0008 + 3)),
                 data: (null as unknown) as ArrayBuffer,
-                dataOffset: rgbaOffset
+                dataOffset: rgbaOffset,
             }
             frameEntry.compressed = !compressed
             frameEntries.push(frameEntry)

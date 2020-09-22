@@ -18,11 +18,7 @@ export function decompressRLE(data: ArrayBuffer, compressionByte: number) {
     for (let i = 0; i < compressedData.byteLength; i++) {
         if (compressedData.getUint8(i) === compressionByte) {
             const numberOfRepeats = compressedData.getUint8(i + 1) + 1
-            for (
-                let processedRepeats = 0;
-                processedRepeats < numberOfRepeats;
-                processedRepeats++
-            ) {
+            for (let processedRepeats = 0; processedRepeats < numberOfRepeats; processedRepeats++) {
                 decompressedData.push(compressionByte)
             }
             i = i + 1

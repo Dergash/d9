@@ -1,0 +1,49 @@
+.container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 240px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-rows: max-content max-content;
+        height: initial;
+    }
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 32px auto 32px;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+}
+
+.text {
+    text-transform: capitalize;
+    margin: 0;
+}
+
+.table {
+    margin-top: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.lock {
+    margin-left: 8px;
+}
+
+.button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: white;
+}
+
+.button:hover {
+    background-color: rgb(20, 37, 50);
+}

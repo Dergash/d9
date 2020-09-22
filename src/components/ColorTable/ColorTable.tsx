@@ -11,9 +11,10 @@ import { useColorTable } from './useColorTable'
 import cn from '../../utils/cn'
 
 interface ColorTableProps {
-    type?: AppearanceColorType
+    type?: AppearanceColorType | 'unlocked'
     colors?: number[]
     selectedIndex?: number
+    className?: string
     onClick?: (index: number) => void
 }
 
@@ -36,16 +37,14 @@ export const ColorTable: React.FC<ColorTableProps> = props => {
 
     const handleClick = React.useCallback(
         (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-            const index =
-                Number.parseInt(event.currentTarget.dataset.index ?? '', 10) ??
-                0
+            const index = Number.parseInt(event.currentTarget.dataset.index ?? '', 10) ?? 0
             props.onClick?.(index)
         },
         [props.onClick]
     )
 
     return (
-        <ul className={styles.list}>
+        <ul className={cn(props.className, styles.list)}>
             {colors?.map((item, index) => {
                 return (
                     <li

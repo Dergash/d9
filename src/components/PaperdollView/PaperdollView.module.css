@@ -8,8 +8,21 @@
 
 .placeholder {
     min-height: 185px;
-    display: flex;
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
+    justify-content: center;
+}
+
+.colorPicker {
+    display: grid;
+    max-width: 240px;
+    margin-top: 24px;
+    margin-left: 8px;
+}
+
+.paperdoll {
+    display: flex;
     justify-content: center;
 }
 
@@ -36,7 +49,35 @@
 }
 
 @media (max-width: 768px) {
+    .container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
     .colorsContainer {
         grid-template-columns: repeat(1, 1fr);
+    }
+
+    .placeholder {
+        display: grid;
+        justify-content: stretch;
+        grid-template-columns: initial;
+        grid-template-rows: 1fr auto;
+    }
+
+    .paperdoll {
+        grid-row: 1;
+    }
+
+    .colorPicker {
+        max-width: initial;
+    }
+
+    .selectors {
+        flex-direction: column;
+    }
+
+    .select {
+        font-size: 1.5em;
     }
 }

@@ -1,15 +1,15 @@
 export type ColorRGB = { red: number; green: number; blue: number }
 
-export type Palette = ColorRGB[]
+export type Palette = ColorRGB[] | null
 
 export type CharacterColor = {
-    skin: any
-    hair: any
-    minor: any
-    major: any
-    metal: any
-    leather: any
-    armor: any
+    skin: Palette
+    hair: Palette
+    minor: Palette
+    major: Palette
+    metal: Palette
+    leather: Palette
+    armor: Palette
 }
 
 export type AppearanceColorType = keyof CharacterColor
