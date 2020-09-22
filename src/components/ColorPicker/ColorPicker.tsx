@@ -5,6 +5,8 @@ import { ColorTable } from '../ColorTable/ColorTable'
 import { PaperdollColorDescriptor } from '../../model/paperdoll'
 import styles from './ColorPicker.module.css'
 import cn from '../../utils/cn'
+import left from '../../assets/controls/chevron_left-24px.svg'
+import right from '../../assets/controls/chevron_right-24px.svg'
 
 const slots: AppearanceColorType[] = ['skin', 'hair', 'major', 'minor', 'armor', 'leather', 'metal']
 
@@ -37,8 +39,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = props => {
     return (
         <Card className={styles.container}>
             <header className={styles.header}>
-                <button onClick={handlePrev} className={styles.button}>
-                    ⯇
+                <button onClick={handlePrev} className={cn(styles.controls, styles.button)}>
+                    <img src={left} alt="Previous color slot" className={styles.arrow} />
                 </button>
                 <div className={styles.title}>
                     <h2 className={styles.text}>{selectedSlot}</h2>
@@ -47,8 +49,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = props => {
                         {!lockColors && '🔓'}
                     </button>
                 </div>
-                <button onClick={handleNext} className={styles.button}>
-                    ⯈
+                <button onClick={handleNext} className={cn(styles.controls, styles.button)}>
+                    <img src={right} alt="Next color slot" className={styles.arrow} />
                 </button>
             </header>
             <ColorTable
