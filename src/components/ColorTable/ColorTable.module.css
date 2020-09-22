@@ -22,7 +22,7 @@
     .list {
         grid-template-columns: initial;
         grid-auto-rows: min-content;
-        grid-template-rows: 1fr;
+        grid-template-rows: 50px;
         grid-auto-flow: column;
         overflow-x: scroll;
     }
