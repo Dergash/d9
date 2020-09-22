@@ -32,11 +32,12 @@ export const ChrImport: React.FC = () => {
                 onChange={handleChange}
             />
             <button className={styles.button} onClick={handleClick}>
-                Import Character
+                { entity?.getName() }
+                { !entity && 'Import Character' }
             </button>
         </label>
         <span className={styles.name}>
-            { entity?.getName() }
+            
         </span>
     </div>
 }

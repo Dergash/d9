@@ -16,6 +16,9 @@ export const AppBar: React.FC = () => {
                 <ChrImport />
             </div>
             <div className={styles.links}>
+                <div className={styles.version}>
+                    V0.1.0
+                </div>
                 <a href="https://github.com/Dergash/d9" className={styles.link}>
                     <img src={githubLogo} alt="Visit repository on GitHub" className={styles.img} />
                 </a>
