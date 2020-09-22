@@ -1,40 +1,8 @@
 import { AppearanceColorType } from '../../model/color'
 
 export const dictionary = {
-    skin: [
-        0x53,
-        0x6b,
-        0x08,
-        0x72,
-        0x09,
-        0x0a,
-        0x55,
-        0x54,
-        0x0c,
-        0x10,
-        0x0f,
-        0x11,
-        0x6c,
-        0x6a,
-        0x71,
-        0x0e,
-        0x0d,
-        0x69,
-    ],
-    hair: [
-        0x4f,
-        0x06,
-        0x00,
-        0x02,
-        0x01,
-        0x04,
-        0x6f,
-        0x50,
-        0x03,
-        0x51,
-        0x07,
-        0x52,
-    ],
+    skin: [0x53, 0x6b, 0x08, 0x72, 0x09, 0x0a, 0x55, 0x54, 0x0c, 0x10, 0x0f, 0x11, 0x6c, 0x6a, 0x71, 0x0e, 0x0d, 0x69],
+    hair: [0x4f, 0x06, 0x00, 0x02, 0x01, 0x04, 0x6f, 0x50, 0x03, 0x51, 0x07, 0x52],
     major: [
         36,
         37,
@@ -166,7 +134,12 @@ export const dictionary = {
     ],
 }
 
-export function useColorTable(type: AppearanceColorType | undefined) {
+const unlockedColors = new Array(116).fill(0).map((_, index) => index)
+
+export function useColorTable(type: AppearanceColorType | 'unlocked' | undefined) {
+    if (type === 'unlocked') {
+        return unlockedColors
+    }
     if (type) {
         return dictionary[type]
     }

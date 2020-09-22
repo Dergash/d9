@@ -6,7 +6,7 @@ import styles from './PaperdollBam.module.css'
 /* eslint import/no-webpack-loader-syntax: off */
 import palette from '!arraybuffer-loader!../../assets/MPALETTE.bmp'
 
-interface PekProps {
+interface PaperdollBamProps {
     paperdollName: string
     skin: number
     hair: number
@@ -17,7 +17,7 @@ interface PekProps {
     metal: number
 }
 
-export const PaperdollBam: React.FC<PekProps> = props => {
+export const PaperdollBam: React.FC<PaperdollBamProps> = props => {
     const [sprite, setSprite] = React.useState<Sprite | undefined | null>()
     const p = React.useMemo(() => {
         const paletteParser = new Palette()
@@ -48,16 +48,12 @@ export const PaperdollBam: React.FC<PekProps> = props => {
         sprite.colors.armor = p[props.armor]
         sprite.colors.metal = p[props.metal]
         const base64 = sprite.getAsBase64()
-        return <div>{sprite && <img src={base64} alt="Color icon" />}</div>
+        return <div>{sprite && <img src={base64} alt="Color icon" className={styles.bam} />}</div>
     }
     return (
         <div>
-            {sprite === undefined && (
-                <div className={styles.placeholder}>Loading...</div>
-            )}
-            {sprite === null && (
-                <div className={styles.placeholder}>Not implemented</div>
-            )}
+            {sprite === undefined && <div className={styles.placeholder}>Loading...</div>}
+            {sprite === null && <div className={styles.placeholder}>Not implemented</div>}
         </div>
     )
 }

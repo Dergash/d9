@@ -24,7 +24,8 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "precommit": "prettier --write ."
+        "precommit": "prettier --write .",
+        "fix": "eslint --ext js,ts,tsx src"
     },
     "eslintConfig": {
         "extends": "react-app"

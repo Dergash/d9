@@ -16,11 +16,9 @@ export default class Palette {
         Object.keys(colors).forEach(color => {
             if (colors[color as keyof CharacterColor]) {
                 for (let i = 0; i < 12; i++) {
-                    // const pek = colors[color as keyof CharacterColor][i];
-                    //  const bek = newPalette[offsets[color as keyof CharacterColor] + i]
-                    newPalette[
-                        offsets[color as keyof CharacterColor] + i
-                    ] = colors[color as keyof CharacterColor][i] as any
+                    newPalette[offsets[color as keyof CharacterColor] + i] = colors[color as keyof CharacterColor]?.[
+                        i
+                    ] as any
                 }
             }
         })
@@ -30,11 +28,7 @@ export default class Palette {
 
     getTransparencyIndex(palette: ColorRGB[]) {
         for (let i = 0; i < palette.length; i++) {
-            if (
-                palette[i].red === 0 &&
-                palette[i].green === 255 &&
-                palette[i].blue === 0
-            ) {
+            if (palette[i].red === 0 && palette[i].green === 255 && palette[i].blue === 0) {
                 return i
             }
         }

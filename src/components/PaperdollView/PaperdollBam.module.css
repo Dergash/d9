@@ -1,3 +1,9 @@
 .placeholder {
     display: flex;
 }
+
+@media (max-width: 768px) {
+    .bam {
+        width: 200px;
+    }
+}

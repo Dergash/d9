@@ -13,11 +13,7 @@ export const AppBar: React.FC = () => {
             </nav>
             <div className={styles.links}>
                 <a href="https://github.com/Dergash/d9" className={styles.link}>
-                    <img
-                        src={githubLogo}
-                        alt="Visit repository on GitHub"
-                        className={styles.img}
-                    />
+                    <img src={githubLogo} alt="Visit repository on GitHub" className={styles.img} />
                 </a>
             </div>
         </div>

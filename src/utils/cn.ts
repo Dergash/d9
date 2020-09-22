@@ -13,19 +13,21 @@ interface IClassNamesDefinition {
  * @param classNames String or { [className]: condition } dictionary
  * @returns Joined className string
  */
-function cn(...classNames: Array<string | IClassNamesDefinition>) {
+function cn(...classNames: Array<string | IClassNamesDefinition | undefined>) {
     const result: string[] = []
-    classNames.forEach(item => {
-        if (typeof item === 'string') {
-            result.push(item)
-        } else {
-            Object.keys(item).forEach(key => {
-                if (item[key]) {
-                    result.push(key)
-                }
-            })
-        }
-    })
+    classNames
+        .filter(item => !!item)
+        .forEach(item => {
+            if (typeof item === 'string') {
+                result.push(item)
+            } else {
+                Object.keys((item as IClassNamesDefinition)).forEach(key => {
+                    if ((item as IClassNamesDefinition)[key]) {
+                        result.push(key)
+                    }
+                })
+            }
+        })
     return result.join(' ')
 }
 
