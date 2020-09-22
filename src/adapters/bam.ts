@@ -1,3 +1,7 @@
+/**
+ * TODO: Move to entities
+ */
+
 import BAMTexture from './bam-texture'
 import { BamFrameHeader, BamFrameEntry } from '../model/bam-frame'
 import { ColorRGB } from '../model/color'

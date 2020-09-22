@@ -1,0 +1,27 @@
+.input {
+    display: none;
+}
+
+.button {
+    background-color: transparent;
+    color: hsla(0, 0%, 100%, 0.4);
+    border: none;
+    outline: none;
+    height:100%;
+    padding-left: 12px;
+    padding-right: 12px;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+.button:hover {
+    background-color: rgb(20, 37, 50);
+}
+
+.container {
+    height: 100%;
+}
+
+.name {
+    margin-left: 12px;
+}
